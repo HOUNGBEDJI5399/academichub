@@ -1,0 +1,275 @@
+@extends('layouts.app2')
+
+@section('content')
+
+
+<style>
+        .modern-form {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: rgba(59, 130, 246, 0.1);
+            --success: #10b981;
+            --text-main: #1e293b;
+            --text-secondary: #64748b;
+            --bg-input: #f8fafc;
+
+            position: relative;
+            width: 350px;
+            height: 320px; 
+            padding: 24px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow:
+                0 4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 2px 4px -2px rgba(0, 0, 0, 0.05),
+                inset 0 0 0 1px rgba(148, 163, 184, 0.1);
+            font-family:
+                system-ui,
+                -apple-system,
+                sans-serif;
+        }
+
+        .form-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin: 0 0 24px;
+            text-align: center;
+            letter-spacing: -0.01em;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 40px;
+            padding: 0 36px;
+            font-size: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: var(--bg-input);
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        .form-textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px 36px;
+            font-size: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: var(--bg-input);
+            color: var(--text-main);
+            transition: all 0.2s ease;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            width: 16px;
+            height: 16px;
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        .textarea-icon {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            width: 16px;
+            height: 16px;
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        .submit-button {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            margin-top: 8px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .button-glow {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .form-footer {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        /* Hover & Focus States */
+        .form-input:hover,
+        .form-textarea:hover {
+            border-color: #cbd5e1;
+        }
+
+        select:hover {
+            border-color:#2563eb;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        select:focus{
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px var(--primary-light);
+        }
+
+        .submit-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow:
+                0 4px 12px rgba(59, 130, 246, 0.25),
+                0 2px 4px rgba(59, 130, 246, 0.15);
+        }
+
+        .submit-button:hover .button-glow {
+            transform: translateX(100%);
+        }
+
+        /* Active States */
+        .submit-button:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* Validation States */
+        .form-input:not(:placeholder-shown):valid,
+        .form-textarea:not(:placeholder-shown):valid {
+            border-color: var(--success);
+        }
+
+        select:not(:placeholder-shown):valid {
+            border-color: var(--success);
+        }
+
+        .form-input:not(:placeholder-shown):valid~.input-icon,
+        .form-textarea:not(:placeholder-shown):valid~.textarea-icon {
+            color: var(--success);
+        }
+
+        /* Animation */
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-4px);
+            }
+            75% {
+                transform: translateX(4px);
+            }
+        }
+
+        .form-input:not(:placeholder-shown):invalid,
+        .form-textarea:not(:placeholder-shown):invalid {
+            border-color: #ef4444;
+            animation: shake 0.2s ease-in-out;
+        }
+
+        .form-input:not(:placeholder-shown):invalid~.input-icon,
+        .form-textarea:not(:placeholder-shown):invalid~.textarea-icon {
+            color: #ef4444;
+        }
+    </style>
+
+    <form  method="POST" action="{{route('annonceadmin')}}" class="modern-form">
+
+        @csrf
+    <div class="form-title">Création d'une annonce</div>
+
+            @if (session('success'))
+     <span  class="alert alert-success">{{ session('success')}}</span>    
+    @endif
+
+    @if (session('error'))
+    <span class="alert alert-success" >{{ session('error')}}</span>    
+   @endif
+
+        <div class="form-body">
+            <div class="input-group">
+                <div class="input-wrapper">
+                    <svg fill="none" viewBox="0 0 24 24" class="input-icon">
+                        <path stroke-width="1.5" stroke="currentColor" d="M12 7h8m-8 4h4m-4 4h6M5 7h2m-2 4h2m-2 4h2"></path>
+                        <path stroke-width="1.5" stroke="currentColor" d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z"></path>
+                    </svg>
+                    <input required="" name="title" placeholder="Titre de l'annonce" class="form-input" type="text" />
+                </div>
+            </div>
+
+             @error('title')
+        <span class="text-danger">{{$message}}</span>
+            
+        @enderror
+
+            
+
+            <div class="input-group">
+                <div class="input-wrapper">
+                    <svg fill="none" viewBox="0 0 24 24" class="textarea-icon">
+                        <path stroke-width="1.5" stroke="currentColor" d="M8 5H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V7a2 2 0 00-2-2h-3m-9 4h6m-6 4h6m-6 4h3"></path>
+                    </svg>
+                    <textarea required="" name="description" placeholder="Description de l'annonce" class="form-textarea"></textarea>
+                </div>
+            </div>
+        </div>
+
+         @error('description')
+        <span class="text-danger">{{$message}}</span>
+            
+        @enderror
+
+        <button class="submit-button" type="submit">
+            <span class="button-text">Créer l'annonce</span>
+            <div class="button-glow"></div>
+        </button>
+    </form>
+
+
+   
+
+
+    
+@endsection

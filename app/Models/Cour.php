@@ -1,0 +1,37 @@
+<?php
+
+
+
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Cour extends Model
+{
+    protected $table = "cour";
+
+    protected $fillable = [
+        'nom_cour',
+        'categorie',
+         'fichier',
+       'fichierType',
+        'fichierPath',
+        'user_id'
+    ];
+
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class ,'user_id');
+    }
+
+    public function document()
+    {
+        return $this->hasMany(Document::class);
+    }
+    
+}
+
+
