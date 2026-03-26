@@ -29,6 +29,7 @@ use App\Http\Controllers\PayementController;
 
 Route::get('/', function () {
     return view('etudiantdashboard/acceuil');
+
 });
 
 
